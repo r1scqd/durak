@@ -1,0 +1,74 @@
+#:kivy 1.11.1
+#:import SPADES src.logic.durak.SPADES
+#:import HEARTS src.logic.durak.HEARTS
+#:import DIAMS src.logic.durak.DIAMS
+#:import CLUBS src.logic.durak.CLUBS
+
+
+<Card>:
+  font_name: 'resources/Arial.ttf'
+  halign: 'center'
+  font_size: '32dp'
+  width: '64dp'
+  height: '120dp'
+  size_hint: None, None
+
+  background_normal: 'resources/rounded_corners.png'
+  background_down: 'resources/rounded_corners.png'
+  border: (24, 24, 24, 24)
+
+  background_color: (1, 1, 1, 1) if not root.selected else (0.9, 0.9, 0.9, 1)
+  opacity: 1 if root.state == 'normal' else .8
+
+  canvas.before:
+    PushMatrix
+    Rotate:
+      angle: self.rotation
+      origin: self.center
+  canvas.after:
+    PopMatrix
+
+<GameMessageLabel>:
+  font_name: 'resources/Arial.ttf'
+  font_size: '22dp'
+  text: ''
+  pos: 0, self.width * 0.25
+  color: 1, 1, 1, 1
+  opacity: 0
+
+<GameButton@Button>:
+  text: ''
+  visible: False
+  background_normal: 'resources/rounded_corners.png'
+  background_down: 'resources/rounded_corners.png'
+  size_hint: (0.3, 0.06)
+  color: 0, 0, 0, 1
+  opacity: 1 if self.state == 'normal' else .8
+  border: (24, 24, 24, 24)
+
+<MainLayout@FloatLayout>:
+  canvas.before:
+    Rectangle:
+      pos: self.pos
+      size: self.size
+      source: './resources/bg.png'
+
+  GameMessageLabel:
+    id: game_label
+    pos: 0, self.width * 0.26
+  GameMessageLabel:
+    color: 1, 0.4, 0.4, 1
+    id: error_label
+    pos: 0, self.width * 0.21
+
+  GameButton:
+    text: 'Бито!'
+    id: finish_turn_button
+    pos_hint: {"center_x":0.33,"center_y":0.32}
+    on_press: app.on_finish_button()
+
+  GameButton:
+    text: 'Отключиться!'
+    id: disconnect_button
+    pos_hint: {"center_x":0.66,"center_y":0.32}
+    on_press: app.on_disconnect_button()
